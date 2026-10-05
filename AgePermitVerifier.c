@@ -13,6 +13,8 @@ int main(){
 	const int k = sizeof(permit)/sizeof(permit[0]);
 	const int l = sizeof(age)/sizeof(age[0]);
 	printf("tamanho nomes: %d\ntamanho booleans: %d\ntamanho booleans: %d\n\n", j, k, l); // debug no terminal
+	const int z = sizeof(permit[0]); // <---- pequeno teste
+	printf("%d\n", z);               // observações: string com limite de 10 chars vai retornar 50 no sizeof
 
 	for (int n=0;n<j;n++) {
 		char graphPermit[10] = "";
