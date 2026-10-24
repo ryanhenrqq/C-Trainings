@@ -1,9 +1,8 @@
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
-#include <stdbool.h>
 #include <gtk/gtk.h>
-// COMPILAR -> gcc $( pkg-config --cflags gtk4 ) -o windowGtkDraw windowGtkDraw.c $( pkg-config --libs gtk4 )
+// COMPILAR -> gcc $( pkg-config --cflags gtk4 ) -o windowGtkDraw.out windowGtkDraw.c $( pkg-config --libs gtk4 )
 
 static void senha_oito (GtkWidget *widget, gpointer data){
     char password[8] = "";
