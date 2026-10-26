@@ -1,9 +1,19 @@
+#define _GNU_SOURCE
 #include <stdio.h>
 #include <gtk/gtk.h>
+#include <time.h>
 // compila -> bash comp pt2trainings
+
+static void verazhoraz(GtkWidget *widget, gpointer *userdata) {
+	char *cmm;
+	asprintf (&cmm, "xdg-open https://www.google.com/");
+	system (cmm);
+	free (cmm);
+}
 
 static void app_activate (GApplication *app, gpointer *userdata){
 	GtkWidget *win;
+	GtkWidget *btn;
 	GtkWidget *scroll;
 	GtkWidget *box;
 	GtkWidget *txt;
@@ -17,15 +27,26 @@ static void app_activate (GApplication *app, gpointer *userdata){
 	gtk_window_set_title (GTK_WINDOW (win), "Texto Scrollavel");
 	gtk_window_set_default_size (GTK_WINDOW (win), 300,100);
 
+	box = gtk_box_new (GTK_ORIENTATION_VERTICAL, 5);
+	gtk_box_set_homogeneous (GTK_BOX (box), TRUE);
+	gtk_window_set_child(GTK_WINDOW (win), box);
+
 	scroll = gtk_scrolled_window_new ();
-	gtk_window_set_child (GTK_WINDOW (win), scroll);
+	gtk_box_append (GTK_BOX (box), scroll);
 
 	txt = gtk_text_view_new ();
 	tb = gtk_text_view_get_buffer (GTK_TEXT_VIEW (txt));
 	gtk_text_buffer_set_text (tb, apresentacao, -1);
 	gtk_text_view_set_wrap_mode (GTK_TEXT_VIEW (txt), GTK_WRAP_WORD_CHAR);
-
 	gtk_scrolled_window_set_child (GTK_SCROLLED_WINDOW (scroll), txt);
+
+	btn = gtk_button_new_with_label ("Abrir Navegador no Google");
+	g_signal_connect (btn, "clicked", G_CALLBACK (verazhoraz), NULL);
+	gtk_box_append (GTK_BOX (box), btn);
+
+	btn = gtk_button_new_with_label ("tabao");
+	g_signal_connect_swapped (btn, "clicked", G_CALLBACK (gtk_window_destroy), win);
+	gtk_box_append (GTK_BOX (box), btn);
 
 	gtk_window_present (GTK_WINDOW (win));
 }
