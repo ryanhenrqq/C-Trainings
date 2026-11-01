@@ -42,6 +42,11 @@ static void number9(GtkWidget *widget, gpointer *userdata) {
         nb1 = 9;
 	puts("Numero 9 adicionado");
 }
+static void number0(GtkWidget *widget, gpointer *userdata) {
+        nb1 = 0;
+	puts("Numero 0 adicionado");
+}
+
 
 
 static void app_activate (GtkApplication *app, gpointer *userdata){
@@ -52,6 +57,8 @@ static void app_activate (GtkApplication *app, gpointer *userdata){
 
 	GObject *win = gtk_builder_get_object (builder, "window");
 	gtk_window_set_application (GTK_WINDOW (win), app);
+
+	GObject *lb = gtk_builder_get_object (builder,"top-lb");
 
 	GObject *btn = gtk_builder_get_object (builder, "btn1");
 	g_signal_connect (btn, "clicked", G_CALLBACK (number1), NULL);
@@ -79,6 +86,9 @@ static void app_activate (GtkApplication *app, gpointer *userdata){
 
 	btn = gtk_builder_get_object (builder, "btn9");
 	g_signal_connect (btn, "clicked", G_CALLBACK (number9), NULL);
+	
+	btn = gtk_builder_get_object (builder, "btn0");
+	g_signal_connect (btn, "clicked", G_CALLBACK (number0), NULL);
 
 	btn = gtk_builder_get_object (builder, "exit");
 	g_signal_connect_swapped (btn, "clicked", G_CALLBACK (gtk_window_close), win);
