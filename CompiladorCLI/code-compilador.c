@@ -63,10 +63,22 @@ int main(int argc, char *argv[]){
 	int op = system(cmd);
 
 	if (op!=0){
-		printf ("COMPILADOR: Houve um erro ao compilar!");
+		printf ("COMPILADOR: Houve um erro ao compilar, com codigo %i!", op);
 		return op;
 	} else {
-		printf ("COMPILADOR: O arquivo foi compilado com sucesso! execute './%s'\n", argv[1]);
+		printf ("COMPILADOR: O arquivo foi compilado com sucesso com codigo %i!\n", op);
+	}
+
+	char runner[100];
+	snprintf (runner, sizeof(runner), "./%s", argv[1]);
+
+	op = system(runner);
+
+	if (op!=0){
+		printf ("COMPILADOR: Houve um erro ao executar, codigo %i!\n", op);
+		return op;
+	} else {
+		printf ("COMPILADOR: Arquivo executado com sucesso com codigo %i!\n", op);
 		return op;
 	}
 	// resumo desse codigo:
