@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <unistd.h>
 
 int main(int argc, char *argv[]){
 	char usageLn1[30] = "Como usar o compilador?:";
@@ -15,11 +16,37 @@ int main(int argc, char *argv[]){
 		return 1;
 	}
 	if (argc > 2){
-		printf ("%s\n%s\n", usageLn1, usageLn2);
+		printf ("ERRO: O programa exige apenas 1 argumento, mas foram  detectados %i!\n\n%s\n%s\n", argc - 1, usageLn1, usageLn2);
 		printf ("%s\n%s\n", usageLn3, usageLn4);
 		printf ("%s\n", usageLn5);
 		return 1;
 	}
+
+	// logica de checagem da existencia do arquivo
+	char filechk[200];
+	snprintf (filechk, sizeof(filechk), "%s.c", argv[1]);
+	if (access(filechk, F_OK)!=0){
+		printf ("ERRO: O arquivo especificado não existe!\n\n%s\n%s\n", usageLn1, usageLn2);
+		printf ("%s\n%s\n", usageLn3, usageLn4);
+		printf ("%s\n", usageLn5);
+		return 1;
+
+	} else {
+		printf ("COMPILADOR: O arquivo %s foi encontrado, iniciando.\n", filechk);
+	}
+	// o que essa logica faz?
+	// 	char filechk -> declara a string do nome do arquivo
+	// 	snprintf -> pega o nome passado no argumento e adiciona a extensao .c no final
+	// 	if access(filechk, F_OK) -> ele vai tentar acessar o arquivo salvo em filechk
+	// 		se ele conseguir, vai marcar q o arquivo ta ok e vai retornar 0, ignorando o if e continuando
+	// 		se ele nao conseguir, ele vai retornar algum outro numero pra indicar que nao teve sucesso, caindo na logica do if e barrando bugs
+	
+	// treino pra limpar memoria
+	usageLn1[0] = '\0';
+	usageLn2[0] = '\0';
+	usageLn3[0] = '\0';
+	usageLn4[0] = '\0';
+	usageLn5[0] = '\0';
 
 	char cmd[300];
 
@@ -29,9 +56,19 @@ int main(int argc, char *argv[]){
 	//  o comando do gcc sera rodado no terminal
 	//  pra finalizar, os %s vai ser trocado pelo argumento passado pelo usuario, no caso o nome do arquivo
 
-	printf ("COMPILADOR: Compilando %s.c\n", argv[1]);
+	printf ("COMPILADOR: Compilando %s\n", filechk);
 
-	return system(cmd);
+	filechk[0] = '\0';
+
+	int op = system(cmd);
+
+	if (op!=0){
+		printf ("COMPILADOR: Houve um erro ao compilar!");
+		return op;
+	} else {
+		printf ("COMPILADOR: O arquivo foi compilado com sucesso! execute './%s'\n", argv[1]);
+		return op;
+	}
 	// resumo desse codigo:
 	// 	int argc -> vai pegar a quantidade de argumentos passada pela execuçao
 	// 	char argv[] -> monta string com os argumentos passados e vira uma array aparentemente
