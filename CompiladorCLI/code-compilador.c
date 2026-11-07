@@ -22,7 +22,6 @@ int main(int argc, char *argv[]){
 	if (argc > 2) {
 		for (int i = 2; i < argc; i++) {
 			if (strcmp(argv[i], "-r")==0){
-				printf ("Rodando em modo de execuçao\n");
 				runningMode = true;
 			}
 			if (strcmp(argv[i], "-m")==0){
