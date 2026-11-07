@@ -7,7 +7,7 @@
 int main(int argc, char *argv[]){
 	char usageLn1[30] = "Como usar o compilador?:";
 	char usageLn2[80] = "Requisitos -> ter o arquivo com a extensao .c no mesmo local do compilador";
-	char usageLn3[90] = "Forma de uso - > Execute './compilador <nome do arquivo> [-r: executar apos compilar]'";
+	char usageLn3[125] = "Forma de uso - > Execute './compilador <nome do arquivo> [-r: executar apos compilar][-m: modo limpo, sem log no terminal]'";
 	char usageLn4[80] = "Não é necessario colocar a extensao '.c' no final do nome do arquivo!";
 	char usageLn5[30] = "Tire bom proveito!";
 	bool minimalMode = false;
@@ -83,7 +83,7 @@ int main(int argc, char *argv[]){
 	int op = system(cmd);
 
 	if (op!=0){
-		printf ("COMPILADOR: Houve um erro ao compilar, com codigo %i!", op);
+		printf ("COMPILADOR: Houve um erro ao compilar, com codigo %i!\n", op);
 		return op;
 	} else {
 		if (minimalMode==false){
@@ -102,11 +102,11 @@ int main(int argc, char *argv[]){
 	op = system(runner);
 
 	if (op!=0){
-		printf ("COMPILADOR: Houve um erro ao executar, codigo %i!\n", op);
+		printf ("\nCOMPILADOR: Houve um erro ao executar, codigo %i!\n", op);
 		return op;
 	} else {
 		if(minimalMode==false){
-			printf ("COMPILADOR: Arquivo executado com sucesso com codigo %i!\n", op);
+			printf ("\nCOMPILADOR: Arquivo executado com sucesso com codigo %i!\n", op);
 		}
 		return op;
 	}

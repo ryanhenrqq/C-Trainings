@@ -33,10 +33,12 @@ int main(){
 	int serv, client;
 	char buffer[1024];
 	struct sockaddr_in address;
+	struct sockaddr_in addr_client; // pra uso la embaixo em detectar ip da pessoa conectada
 	serv = socket(AF_INET, SOCK_STREAM, 0);
 	address.sin_family = AF_INET;
 	address.sin_port = htons (8123);
 	address.sin_addr.s_addr = htonl (INADDR_ANY);
+	socklen_t client_len = sizeof(addr_client);
 
 	//atributos para descobrir ip local - baseado no arquivo local em /IPGetter/ipget.c
 	char hostbuffer[256];
@@ -59,30 +61,42 @@ int main(){
 		return 1;
 	}
 
-	printf ("Listening on %s:8123\n", ipbuffer);
+	printf ("Ta aberto no servidor %s:8123\n", ipbuffer);
 
 	while (1){
-		client = accept (serv, NULL, NULL);
+		client = accept (serv, (struct sockaddr *)&addr_client, &client_len);
 
 		if (client < 0) {
-			printf ("Communication error!");
-			continue;
+			// bug
+			// 	dps que eu coloquei a mensagem automatica de conexao nova com o ip do dispositivo, ele ta sempre caindo em loop aqui
+			// 	por conta do fechamento do socket ali embaixo dps da resposta. nao sei ainda como vou fazer pra manter o
+			// 	ip e a troca de mensagem sem quebrar na 2 mensagem de volta.
+			printf ("Erro de comunicação com o cliente!");
+			return 1;
+		} else {
+			char ip[INET_ADDRSTRLEN];
+			inet_ntop(AF_INET, &addr_client.sin_addr, ip, sizeof(ip));
+			printf ("\nNova conexão: %s\n", ip);
 		}
-
+   		char welcome[12] = "Mensagem: ";
+		send (client, welcome, strlen(welcome), 0);
 		ssize_t bytes = recv (client, buffer, sizeof(buffer) -1, 0);
 
 		if (bytes > 0){
 			buffer[bytes] = '\0';
-			printf ("received: %s\n", buffer);
+			printf ("\nRecebido: %s\n", buffer);
+			send (client, "Respondendo, aguarde...\n", 26, 0);
 
 			// resposta do servidor (experimental)
 			char res[30];
+			char resback[50];
 			printf ("Digite uma resposta: ");
 			fgets (res, sizeof(res), stdin);
-			send (client, res, strlen(res), 0);
+			snprintf (resback, sizeof(resback), "Resposta: %s\n", res);
+			send (client, resback, strlen(resback), 0);
 		}
 
-		close (client);
+		close (serv);
 	}
 
 	close (serv);
