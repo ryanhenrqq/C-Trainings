@@ -74,6 +74,12 @@ int main(){
 		if (bytes > 0){
 			buffer[bytes] = '\0';
 			printf ("received: %s\n", buffer);
+
+			// resposta do servidor (experimental)
+			char res[30];
+			printf ("Digite uma resposta: ");
+			fgets (res, sizeof(res), stdin);
+			send (client, res, strlen(res), 0);
 		}
 
 		close (client);
@@ -83,3 +89,6 @@ int main(){
 
 	return 0;
 }
+
+// comentario aleatorio: sem brincadeira, esse foi o melhor codigo que 
+// montei em c kkkk fiquei 50x mais interessado dps de fazer esse comunicador de rede
